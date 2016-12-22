@@ -83,7 +83,7 @@ module WillPaginate
           excluded = [:order, :limit, :offset, :reorder]
           excluded << :includes unless eager_loading?
           rel = self.except(*excluded)
-          column_name = (select_for_count(rel) || :all)
+          column_name = (select_value_for_count(rel) || :all)
           rel.count(column_name)
         else
           super(*args)
@@ -137,7 +137,7 @@ module WillPaginate
         other
       end
       
-      def select_for_count(rel)
+      def select_value_for_count(rel)
         if rel.select_values.present?
           select = rel.select_values.join(", ")
           select if select !~ /[,*]/
